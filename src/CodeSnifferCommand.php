@@ -56,6 +56,7 @@ class CodeSnifferCommand extends Command
         }
 
         $phpcsBin = $this->config->get('git-sniffer.phpcs_bin');
+        $phpcbfBin = $this->config->get('git-sniffer.phpcbf_bin');
         $eslintBin = $this->config->get('git-sniffer.eslint_bin');
         $eslintConfig = $this->config->get('git-sniffer.eslint_config');
         $eslintIgnorePath = $this->config->get('git-sniffer.eslint_ignore_path');
@@ -135,20 +136,14 @@ class CodeSnifferCommand extends Command
             exit(0);
         }
 
-        $this->files->makeDirectory($tempStaging);
+        //$this->files->makeDirectory($tempStaging);
         $phpStaged = [];
         $eslintStaged = [];
         foreach ($validFiles as $f) {
-            $id = shell_exec("git diff-index --cached {$against} \"{$f}\" | cut -d \" \" -f4");
-            if (!$this->files->exists($tempStaging . '/' . $this->files->dirname($f))) {
-                $this->files->makeDirectory($tempStaging . '/' . $this->files->dirname($f), 0755, true);
-            }
-            $output = shell_exec("git cat-file blob {$id}");
-            $this->files->put($tempStaging . '/' . $f, $output);
 
             if (!empty($phpcsBin)) {
                 if (in_array($this->files->extension($f), $validPhpExtensions)) {
-                    $phpStaged[] = '"' . $tempStaging . '/' . $f . '"';
+                    $phpStaged[] = '"' . $f . '"';
                 }
             }
 
@@ -168,11 +163,14 @@ class CodeSnifferCommand extends Command
             $ignoreFiles = $this->config->get('git-sniffer.phpcs_ignore');
             $phpcsExtensions = implode(',', $validPhpExtensions);
             $sniffFiles = implode(' ', $phpStaged);
-
             $phpcsIgnore = null;
             if (!empty($ignoreFiles)) {
                 $phpcsIgnore = ' --ignore=' . implode(',', $ignoreFiles);
             }
+    
+            $phpcbfOutput = shell_exec("\"{$phpcbfBin}\" -p {$sniffFiles}");
+            echo $phpcbfOutput;
+            echo "\n";
             $phpcsOutput = shell_exec("\"{$phpcsBin}\" -s --standard={$standard} --encoding={$encoding} --extensions={$phpcsExtensions}{$phpcsIgnore} {$sniffFiles}");
         }
 
@@ -193,7 +191,7 @@ class CodeSnifferCommand extends Command
             exit(0);
         } else {
             if (!empty($phpcsOutput)) {
-                $this->error($phpcsOutput);
+                echo $phpcsOutput;
             }
 
             if (!empty($eslintOutput)) {
