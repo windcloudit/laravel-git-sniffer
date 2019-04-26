@@ -1,12 +1,12 @@
 {
-    "name": "avirdz/laravel-git-sniffer",
+    "name": "windcloud/laravel-git-sniffer",
     "description": "An artisan command to check your code standards via pre-commit git hook.",
     "keywords": ["laravel", "codesniffer", "phpcs", "git", "pre-commit", "hook"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Jesus Aviles",
-            "email": "avirdz@gmail.com"
+            "name": "Wind Cloud",
+            "email": "tat.pham89@gmail.com"
         }
     ],
     "require": {
