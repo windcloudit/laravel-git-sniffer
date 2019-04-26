@@ -9,9 +9,12 @@ return array(
 
     // full path for phpcs bin
     'phpcs_bin' => './vendor/bin/phpcs',
+    
+    // full path for phpbf bin
+    'phpcbf_bin' => './vendor/bin/phpcbf',
 
     // code standard to verify
-    'standard' => 'PSR2',
+    'standard' => './phpcs.xml',
 
     // file encoding
     'encoding' => 'utf-8',
@@ -24,11 +27,13 @@ return array(
     // phpcs ignore list
     'phpcs_ignore' => [
         //laravel view blade templates
-        './resources/views/*'
+        './resources/views/*',
+        './app/Console/Commands/*'
+
     ],
 
     // temp dir to staged files
-    'temp' => '.tmp_staging',
+    'temp' => '',
 
     // Eslint specific config
 
