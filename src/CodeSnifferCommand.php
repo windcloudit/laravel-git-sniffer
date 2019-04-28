@@ -104,11 +104,11 @@ class CodeSnifferCommand extends Command
             exit(0);
         }
 
-        $tempStaging = $this->config->get('git-sniffer.temp');
+        //$tempStaging = $this->config->get('git-sniffer.temp');
         //create temporary copy of staging area
-        if ($this->files->exists($tempStaging)) {
-            $this->files->deleteDirectory($tempStaging);
-        }
+        //if ($this->files->exists($tempStaging)) {
+        //    $this->files->deleteDirectory($tempStaging);
+        //}
 
         $fileList = explode("\n", $files);
         $validPhpExtensions = $this->config->get('git-sniffer.phpcs_extensions');
@@ -149,7 +149,7 @@ class CodeSnifferCommand extends Command
 
             if (!empty($eslintBin)) {
                 if (in_array($this->files->extension($f), $validEslintExtensions)) {
-                    $eslintStaged[] = '"' . $tempStaging . '/' . $f . '"';
+                    $eslintStaged[] = '"' . $f . '"';
                 }
             }
         }
@@ -185,7 +185,9 @@ class CodeSnifferCommand extends Command
             $eslintOutput = shell_exec("\"{$eslintBin}\" -c \"{$eslintConfig}\"{$eslintIgnore} --quiet  {$eslintFiles}");
         }
 
-        $this->files->deleteDirectory($tempStaging);
+        //$this->files->deleteDirectory($tempStaging);
+        //Run test case
+        $this->runUnitTest();
 
         if (empty($phpcsOutput) && empty($eslintOutput)) {
             exit(0);
@@ -200,5 +202,36 @@ class CodeSnifferCommand extends Command
 
             exit(1);
         }
+    }
+    
+    private function runUnitTest()
+    {
+        $phpunitBin = $this->config->get('git-sniffer.phpunit_bin');
+    
+        echo PHP_EOL;
+        // output a little introduction
+        echo '>> Starting unit tests' . PHP_EOL;
+        // get the name for this project; probably the topmost folder name
+        $projectName = basename(getcwd());
+        // execute unit tests (it is assumed that a phpunit.xml configuration is present
+        // in the root of the project)
+        exec($phpunitBin, $output, $returnCode); // cwd is assumed here
+        // if the build failed, output a summary and fail
+        if ($returnCode !== 0) {
+            foreach ($output as $key=>$error) {
+                echo $error;
+                echo PHP_EOL;
+            }
+            // output the status
+            echo '>> Test suite for ' . $projectName . ' failed:' . PHP_EOL;
+            //echo $minimalTestSummary;
+            echo chr(27) . '[0m' . PHP_EOL; // disable colors and add a line break
+            echo PHP_EOL;
+            // abort the commit
+            exit(1);
+        }
+        echo '>> All tests for ' . $projectName . ' passed.' . PHP_EOL;
+        echo PHP_EOL;
+        exit(0);
     }
 }
