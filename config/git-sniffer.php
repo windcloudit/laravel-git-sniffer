@@ -12,6 +12,9 @@ return array(
     
     // full path for phpbf bin
     'phpcbf_bin' => './vendor/bin/phpcbf',
+    
+    // full path for phpunit bin
+    'phpunit_bin' => './vendor/bin/phpunit',
 
     // code standard to verify
     'standard' => './phpcs.xml',
