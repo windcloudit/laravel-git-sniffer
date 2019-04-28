@@ -186,24 +186,28 @@ class CodeSnifferCommand extends Command
         }
 
         //$this->files->deleteDirectory($tempStaging);
-        //Run test case
-        $this->runUnitTest();
+       
 
-        if (empty($phpcsOutput) && empty($eslintOutput)) {
-            exit(0);
-        } else {
+        if (!empty($phpcsOutput) || !empty($eslintOutput)) {
             if (!empty($phpcsOutput)) {
                 echo $phpcsOutput;
             }
-
+    
             if (!empty($eslintOutput)) {
                 $this->error($eslintOutput);
             }
-
+    
             exit(1);
         }
+    
+        //Run test case
+        $this->runUnitTest();
     }
     
+    /**
+     * Function use for run unit test
+     * @author: tat.pham
+     */
     private function runUnitTest()
     {
         $phpunitBin = $this->config->get('git-sniffer.phpunit_bin');
@@ -232,6 +236,6 @@ class CodeSnifferCommand extends Command
         }
         echo '>> All tests for ' . $projectName . ' passed.' . PHP_EOL;
         echo PHP_EOL;
-        exit(0);
+        exit(0); // Commit code
     }
 }
