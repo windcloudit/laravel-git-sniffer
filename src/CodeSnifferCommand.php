@@ -219,7 +219,7 @@ class CodeSnifferCommand extends Command
         $projectName = basename(getcwd());
         // execute unit tests (it is assumed that a phpunit.xml configuration is present
         // in the root of the project)
-        exec($phpunitBin, $output, $returnCode); // cwd is assumed here
+        exec("\"{$phpunitBin}\"", $output, $returnCode); // cwd is assumed here
         // if the build failed, output a summary and fail
         if ($returnCode !== 0) {
             foreach ($output as $key=>$error) {
