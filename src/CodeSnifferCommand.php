@@ -169,6 +169,8 @@ class CodeSnifferCommand extends Command
             }
     
             $phpcbfOutput = shell_exec("\"{$phpcbfBin}\" -p {$sniffFiles}");
+            // Add all file after modify again
+            shell_exec("git add {$sniffFiles}");
             echo $phpcbfOutput;
             echo "\n";
             $phpcsOutput = shell_exec("\"{$phpcsBin}\" -s --standard={$standard} --encoding={$encoding} --extensions={$phpcsExtensions}{$phpcsIgnore} {$sniffFiles}");
