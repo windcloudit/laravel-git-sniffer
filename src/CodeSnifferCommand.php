@@ -221,7 +221,7 @@ class CodeSnifferCommand extends Command
         $projectName = basename(getcwd());
         // execute unit tests (it is assumed that a phpunit.xml configuration is present
         // in the root of the project)
-        echo exec("\"{$phpunitBin}\"", $output, $returnCode); // cwd is assumed here
+        exec("\"{$phpunitBin}\"", $output, $returnCode); // cwd is assumed here
         echo PHP_EOL;
         // if the build failed, output a summary and fail
         if ($returnCode !== 0) {
@@ -236,7 +236,13 @@ class CodeSnifferCommand extends Command
             echo PHP_EOL;
             // abort the commit
             exit(1);
+        } else {
+            foreach ($output as $key=>$value) {
+                echo $value;
+                echo PHP_EOL;
+            }
         }
+        echo PHP_EOL;
         echo '>> All tests for ' . $projectName . ' passed.' . PHP_EOL;
         echo PHP_EOL;
         exit(0); // Commit code
