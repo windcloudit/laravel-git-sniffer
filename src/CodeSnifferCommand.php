@@ -4,6 +4,8 @@ namespace Avirdz\LaravelGitSniffer;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
+
 
 /**
  * Class CodeSnifferCommand
@@ -203,7 +205,11 @@ class CodeSnifferCommand extends Command
         }
     
         //Run test case
-        $this->runUnitTest();
+        if($this->runUnitTest() === false) {
+            exit(1);
+        }
+
+        exit(0); // Commit code
     }
     
     /**
@@ -217,34 +223,36 @@ class CodeSnifferCommand extends Command
         echo PHP_EOL;
         // output a little introduction
         echo '>> Starting unit tests' . PHP_EOL;
+        echo "\n";
         // get the name for this project; probably the topmost folder name
         $projectName = basename(getcwd());
         // execute unit tests (it is assumed that a phpunit.xml configuration is present
         // in the root of the project)
-        exec("\"{$phpunitBin}\"", $output, $returnCode); // cwd is assumed here
+        $process = $this->process("\"{$phpunitBin}\"");
+        $exitCode = $process->getExitCode();
         echo PHP_EOL;
         // if the build failed, output a summary and fail
-        if ($returnCode !== 0) {
-            foreach ($output as $key=>$error) {
-                echo $error;
-                echo PHP_EOL;
-            }
-            // output the status
-            echo '>> Test suite for ' . $projectName . ' failed:' . PHP_EOL;
-            //echo $minimalTestSummary;
-            echo chr(27) . '[0m' . PHP_EOL; // disable colors and add a line break
-            echo PHP_EOL;
-            // abort the commit
-            exit(1);
-        } else {
-            foreach ($output as $key=>$value) {
-                echo $value;
-                echo PHP_EOL;
-            }
+        if ($exitCode !== 0) {
+            return false;
         }
         echo PHP_EOL;
         echo '>> All tests for ' . $projectName . ' passed.' . PHP_EOL;
         echo PHP_EOL;
-        exit(0); // Commit code
+        return true;
+
     }
+
+    /**
+     * @param $command
+     * @return Process
+     */
+    private function process($command)
+    {
+        $process = new Process($command);
+        $process->run(function ($type, $line) {
+            $this->output->write($line);
+        });
+        return $process;
+    }
+
 }
