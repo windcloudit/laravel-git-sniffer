@@ -249,6 +249,7 @@ class CodeSnifferCommand extends Command
     private function process($command)
     {
         $process = new Process($command);
+        $process->setTimeout(0);
         $process->run(function ($type, $line) {
             $this->output->write($line);
         });
