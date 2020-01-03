@@ -17,13 +17,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Avirdz\\LaravelGitSniffer\\": "src"
+            "WindCloud\\LaravelGitSniffer\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Avirdz\\LaravelGitSniffer\\GitSnifferServiceProvider"
+                "WindCloud\\LaravelGitSniffer\\GitSnifferServiceProvider"
             ]
         }
     }

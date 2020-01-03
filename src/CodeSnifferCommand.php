@@ -1,6 +1,6 @@
 <?php
 
-namespace Avirdz\LaravelGitSniffer;
+namespace WindCloud\LaravelGitSniffer;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -9,7 +9,7 @@ use Symfony\Component\Process\Process;
 
 /**
  * Class CodeSnifferCommand
- * @package Avirdz\LaravelGitSniffer
+ * @package WindCloud\LaravelGitSniffer
  */
 class CodeSnifferCommand extends Command
 {
@@ -169,7 +169,7 @@ class CodeSnifferCommand extends Command
             if (!empty($ignoreFiles)) {
                 $phpcsIgnore = ' --ignore=' . implode(',', $ignoreFiles);
             }
-    
+
             $phpcbfOutput = shell_exec("\"{$phpcbfBin}\" -p {$sniffFiles}");
             // Add all file after modify again
             shell_exec("git add {$sniffFiles}");
@@ -190,20 +190,20 @@ class CodeSnifferCommand extends Command
         }
 
         //$this->files->deleteDirectory($tempStaging);
-       
+
 
         if (!empty($phpcsOutput) || !empty($eslintOutput)) {
             if (!empty($phpcsOutput)) {
                 echo $phpcsOutput;
             }
-    
+
             if (!empty($eslintOutput)) {
                 $this->error($eslintOutput);
             }
-    
+
             exit(1);
         }
-    
+
         //Run test case
         if($this->runUnitTest() === false) {
             exit(1);
@@ -211,7 +211,7 @@ class CodeSnifferCommand extends Command
 
         exit(0); // Commit code
     }
-    
+
     /**
      * Function use for run unit test
      * @author: tat.pham
@@ -219,7 +219,7 @@ class CodeSnifferCommand extends Command
     private function runUnitTest()
     {
         $phpunitBin = $this->config->get('git-sniffer.phpunit_bin');
-    
+
         echo PHP_EOL;
         // output a little introduction
         echo '>> Starting unit tests' . PHP_EOL;

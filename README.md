@@ -4,17 +4,17 @@ An artisan command to check your code standards via pre-commit git hook
 ### Install with composer
 
 ```sh
-composer require avirdz/laravel-git-sniffer
+composer require WindCloud/laravel-git-sniffer
 ```
 
 #### Add the provider to app config (You don't need to do this if using Laravel >= 5.5)
 ```sh
-Avirdz\LaravelGitSniffer\GitSnifferServiceProvider
+WindCloud\LaravelGitSniffer\GitSnifferServiceProvider
 ```
 
 #### Use artisan to publish the config
 ```sh
-php artisan vendor:publish --provider="Avirdz\LaravelGitSniffer\GitSnifferServiceProvider" --tag=config
+php artisan vendor:publish --provider="WindCloud\LaravelGitSniffer\GitSnifferServiceProvider" --tag=config
 ```
 
 #### Run artisan command to copy the pre-commit hook

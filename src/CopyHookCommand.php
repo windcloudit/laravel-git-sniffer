@@ -1,6 +1,6 @@
 <?php
 
-namespace Avirdz\LaravelGitSniffer;
+namespace WindCloud\LaravelGitSniffer;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
