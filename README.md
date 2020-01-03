@@ -24,7 +24,7 @@ php artisan git-sniffer:copy
 
 #### Add its path to the PHP_CodeSniffer configuration:
 ```
- phpcs --config-set installed_paths ../../../VariableAnalysis
+ phpcs --config-set installed_paths ../../sirbrillig/phpcs-variable-analysis
 ```
 
 If you are working with other developers and you prefer each time that someone makes a clone and runs composer install, the hook is automatically copied, just add the copy command to the composer scripts, anyways it runs only on the defined environment, which by default is local.
