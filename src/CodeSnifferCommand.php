@@ -204,8 +204,9 @@ class CodeSnifferCommand extends Command
             exit(1);
         }
 
+        $isRunPhpUnit = $this->config->get('git-sniffer.is_run_phpunit');
         //Run test case
-        if($this->runUnitTest() === false) {
+        if($isRunPhpUnit && $this->runUnitTest() === false) {
             exit(1);
         }
 

@@ -9,10 +9,13 @@ return array(
 
     // full path for phpcs bin
     'phpcs_bin' => './vendor/bin/phpcs',
-    
+
     // full path for phpbf bin
     'phpcbf_bin' => './vendor/bin/phpcbf',
-    
+
+    // Is run phpunit when commit code
+    'is_run_phpunit' => false,
+
     // full path for phpunit bin
     'phpunit_bin' => './vendor/bin/phpunit',
 
